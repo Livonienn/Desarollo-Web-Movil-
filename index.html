@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panadería Artesanal Dulce Hogar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('https://cdn.discordapp.com/attachments/887070117530329088/1424923557301059614/unnamed_1.jpg?ex=68e5b6f9&is=68e46579&hm=91b18a01127411daeb4a6d5437fcffc1efded6034aa604ca7a28e81ca398c987&');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+    header {
+    background-image: url('');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        nav button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .cart-badge {
+            background: #ff4757;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .auth-section, .catalog-section, .product-detail, .cart-section, .checkout-section {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .auth-section.active, .catalog-section.active, .product-detail.active, 
+        .cart-section.active, .checkout-section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tabs button {
+            background: none;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .auth-tabs button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .error {
+            color: #ff4757;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #2ed573;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .categories {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .product-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px 10px 0 0;
+    /* Quita estas líneas: */
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* font-size: 60px; */
+}
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: #2ed573;
+            color: white;
+        }
+
+        .status-baking {
+            background: #ffa502;
+            color: white;
+        }
+
+        .status-soldout {
+            background: #ff4757;
+            color: white;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .quantity-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .cart-summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .summary-total {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            padding-top: 10px;
+            border-top: 2px solid #ddd;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .user-greeting {
+            color: white;
+            font-weight: bold;
+        }
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .delivery-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .delivery-option {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .delivery-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .delivery-option h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #productDetailModal {
+            padding: 40px;
+        }
+
+        .product-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .product-detail-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: white;
+        }
+
+        .ingredients-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .allergens {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .allergen-tag {
+            padding: 5px 10px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Panaderia Familiar Dulce Hogar</div>
+            <nav id="mainNav">
+                <button onclick="showCatalog()">Catálogo</button>
+                <button onclick="showCart()">
+                    🛒 Carrito
+                    <span class="cart-badge" id="cartCount">0</span>
+                </button>
+                <span class="user-greeting" id="userGreeting"></span>
+                <button onclick="logout()" id="logoutBtn" style="display:none;">Cerrar Sesión</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- B-01 & B-02: Autenticación -->
+        <div class="auth-section active" id="authSection">
+            <h2>Bienvenido a Dulce Hogar</h2>
+            <div class="auth-tabs">
+                <button class="active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+                <button onclick="switchAuthTab('register')">Registrarse</button>
+            </div>
+
+            <!-- Login Form (B-02) -->
+            <form id="loginForm" style="display:block;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="maria@dulcehogar.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="Mínimo 8 caracteres" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="rememberMe"> Recordarme
+                    </label>
+                </div>
+                <div id="loginError" class="error"></div>
+                <div id="loginAttempts" class="error"></div>
+                <button type="submit" class="btn">Iniciar Sesión</button>
+                <br><br>
+                <button type="button" class="link-btn" onclick="alert('Funcionalidad B-03: Recuperación de contraseña')">¿Olvidaste tu contraseña?</button>
+            </form>
+
+            <!-- Register Form (B-01) -->
+            <form id="registerForm" style="display:none;">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="regName" placeholder="María" required>
+                </div>
+                <div class="form-group">
+                    <label>Apellido</label>
+                    <input type="text" id="regLastname" placeholder="González" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="maria@dulcehogar.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="regPhone" placeholder="+54 911 1234567" required>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="regAddress" placeholder="Av. Principal 123, CABA" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña (mínimo 8 caracteres, 1 mayúscula, 1 número)</label>
+                    <input type="password" id="regPassword" placeholder="MiPan2024" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña</label>
+                    <input type="password" id="regPasswordConfirm" required>
+                </div>
+                <div id="registerError" class="error"></div>
+                <div id="registerSuccess" class="success"></div>
+                <button type="submit" class="btn">Registrarse</button>
+            </form>
+        </div>
+
+        <!-- B-04: Catálogo de Productos -->
+        <div class="catalog-section" id="catalogSection">
+            <h2>Nuestros Productos</h2>
+            
+            <div class="categories">
+                <button class="category-btn active" onclick="filterByCategory('all')">Todos</button>
+                <button class="category-btn" onclick="filterByCategory('panes')">Panes Artesanales</button>
+                <button class="category-btn" onclick="filterByCategory('pasteles')">Pasteles</button>
+                <button class="category-btn" onclick="filterByCategory('facturas')">Facturas</button>
+                <button class="category-btn" onclick="filterByCategory('temporada')">Temporada</button>
+            </div>
+
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <!-- B-06: Detalle de Producto -->
+        <div class="product-detail" id="productDetailModal">
+            <button onclick="closeProductDetail()" style="float:right;">✖ Cerrar</button>
+            <div id="productDetailContent"></div>
+        </div>
+
+        <!-- B-09: Carrito de Compras -->
+        <div class="cart-section" id="cartSection">
+            <h2>Mi Carrito</h2>
+            <div id="cartItems"></div>
+            <div class="cart-summary" id="cartSummary" style="display:none;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal">$0</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">$0</span>
+                </div>
+                <button class="btn" onclick="proceedToCheckout()" style="width:100%; margin-top:20px;">
+                    Proceder al Checkout
+                </button>
+            </div>
+        </div>
+
+        <!-- B-10: Checkout -->
+        <div class="checkout-section" id="checkoutSection">
+            <h2>Finalizar Compra</h2>
+            
+            <h3>Método de Entrega</h3>
+            <div class="delivery-options">
+                <div class="delivery-option" onclick="selectDelivery('pickup')">
+                    <h3>🏪 Retiro en Local</h3>
+                    <p>Sin costo adicional</p>
+                    <p>Av. Santa Fe 1234 - Horario: 8:00 a 20:00</p>
+                </div>
+                <div class="delivery-option" onclick="selectDelivery('delivery')">
+                    <h3>🚚 Delivery</h3>
+                    <p>Costo según zona</p>
+                    <p>60-90 minutos</p>
+                </div>
+            </div>
+
+            <div id="pickupOptions" style="display:none;">
+                <div class="form-group">
+                    <label>Horario de Retiro</label>
+                    <select id="pickupTime">
+                        <option value="">Seleccionar horario</option>
+                        <option value="09:00-11:00">Mañana 09:00-11:00</option>
+                        <option value="11:00-13:00">Mañana 11:00-13:00</option>
+                        <option value="15:00-17:00">Tarde 15:00-17:00</option>
+                        <option value="17:00-19:00">Tarde 17:00-19:00</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="deliveryOptions" style="display:none;">
+                <div class="form-group">
+                    <label>Dirección de Entrega</label>
+                    <input type="text" id="deliveryAddress" placeholder="Av. Santa Fe 2800, CABA">
+                </div>
+                <div id="deliveryCost" style="margin:10px 0; font-weight:bold;"></div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="checkoutSubtotal">$0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Envío:</span>
+                    <span id="checkoutShipping">$0</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span id="checkoutTotal">$0</span>
+                </div>
+                <button class="btn" onclick="completeOrder()" style="width:100%; margin-top:20px;">
+                    Confirmar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Estado Global
+        const AppState = {
+            users: [
+                { email: 'maria@dulcehogar.com', password: 'MiPan2024', name: 'María', lastname: 'González' }
+            ],
+            currentUser: null,
+            loginAttempts: {},
+            cart: [],
+            products: [
+                {
+                    id: 1,
+                    name: 'Pan Integral',
+                    price: 450,
+                    category: 'panes',
+                    status: 'available',
+                    image: 'https://www.infobae.com/resizer/v2/PK77XOCX4ZAVFI5AUF3DZRBJNY.jpg?auth=76e68dbb00155c439af1eac05a63dda69fdeef55b11e7a7a33353066e2844d20&smart=true&width=1024&height=512&quality=85',
+                    description: 'Pan artesanal elaborado con harina integral 100% natural',
+                    ingredients: ['Harina integral', 'Agua', 'Levadura', 'Sal', 'Aceite de oliva'],
+                    allergens: ['Gluten'],
+                    nutrition: 'Calorías: 250 por 100g',
+                    freshToday: true
+                },
+                {
+                    id: 2,
+                    name: 'Torta de Chocolate',
+                    price: 2800,
+                    category: 'pasteles',
+                    status: 'available',
+                    image: 'https://cdn.luna.com.uy/escaramuza.com.uy/files/tmp/compressed/normal/ra0ylx8tz9d15omllzah.jpg',
+                    description: 'Deliciosa torta de chocolate con cobertura de ganache',
+                    ingredients: ['Chocolate', 'Harina', 'Huevos', 'Azúcar', 'Manteca'],
+                    allergens: ['Gluten', 'Lácteos', 'Huevos'],
+                    nutrition: 'Calorías: 350 por porción',
+                    sizes: ['Individual', 'Mediana', 'Grande']
+                },
+                {
+                    id: 3,
+                    name: 'Facturas Surtidas',
+                    price: 1200,
+                    category: 'facturas',
+                    status: 'baking',
+                    image: 'https://denegocios.cl/wp-content/uploads/2023/02/imagen-1-1024x785.webp',
+                    description: 'Docena de facturas variadas recién horneadas',
+                    ingredients: ['Harina', 'Manteca', 'Azúcar', 'Huevos', 'Levadura'],
+                    allergens: ['Gluten', 'Lácteos', 'Huevos'],
+                    nutrition: 'Calorías: 280 por unidad',
+                    nextBake: '15:00',
+                    readyTime: '15:30'
+                },
+                {
+                    id: 4,
+                    name: 'Pan Francés/Marraqueta',
+                    price: 380,
+                    category: 'panes',
+                    status: 'available',
+                    image: 'https://www.puratos.cl/content/dam/chile/campaigns/campa%C3%B1a-18-septiembre-2024/Marraquetas.jpg/jcr:content/renditions/cq5dam.web.1600.1600.webp',
+                    description: 'Clásico pan Chileno con corteza crujiente',
+                    ingredients: ['Harina', 'Agua', 'Levadura', 'Sal'],
+                    allergens: ['Gluten'],
+                    nutrition: 'Calorías: 265 por 100g',
+                    freshToday: true
+                },
+                {
+                    id: 5,
+                    name: 'Medialunas',
+                    price: 950,
+                    category: 'facturas',
+                    status: 'available',
+                    image: 'https://cuk-it.com/wp-content/uploads/2021/06/medialunas-manteca-ig01.webp',
+                    description: 'Media docena de medialunas manteca',
+                    ingredients: ['Harina', 'Manteca', 'Azúcar', 'Levadura'],
+                    allergens: ['Gluten', 'Lácteos'],
+                    nutrition: 'Calorías: 310 por unidad',
+                    freshToday: true
+                },
+                {
+                    id: 6,
+                    name: 'Pan de Molde',
+                    price: 520,
+                    category: 'panes',
+                    status: 'soldout',
+                    image: 'https://holavegan.com/wp-content/uploads/2014/04/pan-de-molde.jpg',
+                    description: 'Pan de molde ideal para sandwiches',
+                    ingredients: ['Harina', 'Leche', 'Azúcar', 'Levadura', 'Manteca'],
+                    allergens: ['Gluten', 'Lácteos'],
+                    nutrition: 'Calorías: 240 por porción',
+                    availableNext: 'Mañana 8:00'
+                },
+                {
+                    id: 7,
+                    name: 'Torta Pompadour',
+                    price: 650,
+                    category: 'pasteles',
+                    status: 'available',
+                    image: 'https://www.recetasnestle.cl/sites/default/files/srh_recipes/306c4580e0bb9d5ab424a93b02d2b2fa.jpg',
+                    description: 'Tradicional tarta de la zona central de crema con esencia de platano',
+                    ingredients: ['Mantequilla', 'Manjar', 'Huevo', 'Esencia de Platano', 'Vainilla',"Leche","Hojas de masa"],
+                    allergens: ['Gluten', 'Lácteos', 'Huevos'],
+                    nutrition: 'Calorías: 380 por porción',
+                    freshToday: true
+                },
+                   {
+                    id: 8,
+                    name: 'Hallulas',
+                    price: 650,
+                    category: 'pan',
+                    status: 'available',
+                    image: 'https://jumboargentina.vtexassets.com/arquivos/ids/473354/Ayuyas-X-Kg-2-19458.jpg?v=638890520612230000',
+                    description: 'Rico Pan redondo tradicional',
+                    ingredients: ['Harina', 'Levadura', 'Sal', 'Agua'],
+                    allergens: ['Gluten'],
+                    nutrition: 'Calorías: 380 por porción',
+                    freshToday: true
+                },   {
+                    id: 9,
+                    name: 'Chilenitos',
+                    price: 650,
+                    category: 'facturas',
+                    status: 'available',
+                    image: 'https://lafloresta.cl/wp-content/uploads/2020/05/49-Chilenos.jpg',
+                    description: 'Clasico alfajor chileno',
+                    ingredients: ['Masa', 'Agua', 'Manjar'],
+                    allergens: ['Gluten', 'Lácteos', 'Huevos'],
+                    nutrition: 'Calorías: 380 por porción',
+                    freshToday: true
+                },
+            ]
+
+        };
+
+        // B-01: Registro
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value.trim();
+            const lastname = document.getElementById('regLastname').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const address = document.getElementById('regAddress').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            errorEl.textContent = '';
+            successEl.textContent = '';
+            
+            // Validar email único
+            if (AppState.users.find(u => u.email === email)) {
+                errorEl.textContent = 'Este email ya está registrado. ¿Deseas iniciar sesión?';
+                return;
+            }
+            
+            // Validar contraseña
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                errorEl.textContent = 'La contraseña debe tener al menos 8 caracteres, 1 mayúscula y 1 número';
+                return;
+            }
+            
+            // Validar confirmación
+            if (password !== passwordConfirm) {
+                errorEl.textContent = 'Las contraseñas no coinciden';
+                return;
+            }
+            
+            // Validar campos obligatorios
+            if (!name || !lastname || !phone || !address) {
+                errorEl.textContent = 'Todos los campos son obligatorios';
+                return;
+            }
+            
+            // Registrar usuario
+            AppState.users.push({ email, password, name, lastname, phone, address });
+            successEl.textContent = '¡Registro exitoso! Bienvenido con 10% de descuento en tu primer pedido.';
+            
+            showNotification('¡Cuenta creada! Email de bienvenida enviado con 10% descuento');
+            
+            setTimeout(() => {
+                switchAuthTab('login');
+                document.getElementById('loginEmail').value = email;
+            }, 2000);
+        });
+
+        // B-02: Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            const errorEl = document.getElementById('loginError');
+            const attemptsEl = document.getElementById('loginAttempts');
+            errorEl.textContent = '';
+            attemptsEl.textContent = '';
+            
+            // Verificar bloqueo
+            if (AppState.loginAttempts[email] && AppState.loginAttempts[email].blocked) {
+                const blockedUntil = AppState.loginAttempts[email].blockedUntil;
+                if (Date.now() < blockedUntil) {
+                    const minutes = Math.ceil((blockedUntil - Date.now()) / 60000);
+                    errorEl.textContent = `Cuenta bloqueada por ${minutes} minutos por seguridad`;
+                    return;
+                } else {
+                    delete AppState.loginAttempts[email];
+                }
+            }
+            
+            const user = AppState.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                AppState.currentUser = user;
+                delete AppState.loginAttempts[email];
+                showNotification(`¡Bienvenido ${user.name}!`);
+                hideAuth();
+                showCatalog();
+            } else {
+                if (!AppState.loginAttempts[email]) {
+                    AppState.loginAttempts[email] = { count: 0 };
+                }
+                AppState.loginAttempts[email].count++;
+                
+                const remaining = 3 - AppState.loginAttempts[email].count;
+                
+                if (remaining === 0) {
+                    AppState.loginAttempts[email].blocked = true;
+                    AppState.loginAttempts[email].blockedUntil = Date.now() + (20 * 60000); // 20 minutos
+                    errorEl.textContent = 'Cuenta bloqueada por 20 minutos por seguridad';
+                } else if (remaining === 1) {
+                    attemptsEl.textContent = 'Último intento antes de bloqueo temporal';
+                } else {
+                    errorEl.textContent = `Credenciales incorrectas. ${remaining} intentos restantes`;
+                }
+            }
+        });
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tabs button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'login') {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            }
+        }
+
+        function hideAuth() {
+            document.getElementById('authSection').classList.remove('active');
+            document.getElementById('userGreeting').textContent = `Hola, ${AppState.currentUser.name}`;
+            document.getElementById('logoutBtn').style.display = 'block';
+        }
+
+        function logout() {
+            AppState.currentUser = null;
+            AppState.cart = [];
+            document.getElementById('authSection').classList.add('active');
+            document.getElementById('catalogSection').classList.remove('active');
+            document.getElementById('cartSection').classList.remove('active');
+            document.getElementById('checkoutSection').classList.remove('active');
+            document.getElementById('userGreeting').textContent = '';
+            document.getElementById('logoutBtn').style.display = 'none';
+            updateCartCount();
+            showNotification('Sesión cerrada');
+        }
+
+        // B-04: Catálogo
+        function showCatalog() {
+            if (!AppState.currentUser) {
+                showNotification('Por favor inicia sesión');
+                return;
+            }
+            
+            document.getElementById('authSection').classList.remove('active');
+            document.getElementById('catalogSection').classList.add('active');
+            document.getElementById('cartSection').classList.remove('active');
+            document.getElementById('checkoutSection').classList.remove('active');
+            document.getElementById('productDetailModal').classList.remove('active');
+            
+            renderProducts();
+        }
+
+        function renderProducts(category = 'all') {
+            const grid = document.getElementById('productsGrid');
+            const products = category === 'all' 
+                ? AppState.products 
+                : AppState.products.filter(p => p.category === category);
+            
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" onclick="showProductDetail(${product.id})">
+                    <div class="product-image" style="background-image: url('${product.image}'); background-size: cover; background-position: center;"></div>
+                    <div class="product-info">
+                        ${product.freshToday ? '<span class="badge">Fresco del día</span>' : ''}
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${product.price}</div>
+                        <span class="product-status status-${product.status}">
+                            ${getStatusText(product)}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusText(product) {
+            if (product.status === 'available') return 'Disponible ahora';
+            if (product.status === 'baking') return `Listo en 2 horas - ${product.nextBake}`;
+            if (product.status === 'soldout') return `Agotado - ${product.availableNext}`;
+        }
+
+        function filterByCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProducts(category);
+        }
+
+        // B-06: Detalle de Producto
+        function showProductDetail(productId) {
+            const product = AppState.products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const modal = document.getElementById('productDetailModal');
+            const content = document.getElementById('productDetailContent');
+            
+            content.innerHTML = `
+                <div class="product-detail-grid">
+                    <div>
+                        <div class="product-detail-image" style="background-image: url('${product.image}'); background-size: cover; background-position: center;"></div>
+                    </div>
+                    <div>
+                        <h2>${product.name}</h2>
+                        <div class="product-price" style="font-size: 32px; margin: 20px 0;">${product.price}</div>
+                        
+                        <span class="product-status status-${product.status}" style="font-size: 14px;">
+                            ${getStatusText(product)}
+                        </span>
+                        
+                        <p style="margin: 20px 0; color: #666; line-height: 1.6;">${product.description}</p>
+                        
+                        <h3 style="margin-top: 30px;">Ingredientes</h3>
+                        <div class="ingredients-list">
+                            ${product.ingredients.join(', ')}
+                        </div>
+                        
+                        <h3>Alérgenos</h3>
+                        <div class="allergens">
+                            ${product.allergens.map(a => `<span class="allergen-tag">${a}</span>`).join('')}
+                        </div>
+                        
+                        <h3>Información Nutricional</h3>
+                        <p>${product.nutrition}</p>
+                        
+                        ${product.sizes ? `
+                            <h3>Tamaños disponibles</h3>
+                            <p>${product.sizes.join(', ')}</p>
+                        ` : ''}
+                        
+                        ${product.nextBake ? `
+                            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                                <strong>Próximo horneado: ${product.nextBake}</strong><br>
+                                Listo para retiro a las ${product.readyTime}
+                            </div>
+                        ` : ''}
+                        
+                        ${product.status === 'available' ? `
+                            <div class="form-group" style="margin-top: 30px;">
+                                <label>Cantidad</label>
+                                <input type="number" id="productQuantity" value="1" min="1" style="width: 100px;">
+                            </div>
+                            <button class="btn" onclick="addToCart(${product.id})" style="width: 100%;">
+                                Agregar al Carrito
+                            </button>
+                        ` : product.status === 'baking' ? `
+                            <button class="btn" onclick="reserveProduct(${product.id})" style="width: 100%; margin-top: 30px;">
+                                Reservar para las ${product.nextBake}
+                            </button>
+                        ` : `
+                            <button class="btn" onclick="notifyAvailability(${product.id})" style="width: 100%; margin-top: 30px; background: #ff6b6b;">
+                                Notificarme cuando esté disponible
+                            </button>
+                            <h3 style="margin-top: 30px;">Productos similares</h3>
+                            <p>Pan Francés, Medialunas</p>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('catalogSection').classList.remove('active');
+            modal.classList.add('active');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productDetailModal').classList.remove('active');
+            document.getElementById('catalogSection').classList.add('active');
+        }
+
+        function reserveProduct(productId) {
+            const product = AppState.products.find(p => p.id === productId);
+            showNotification(`Producto reservado: ${product.name} para las ${product.nextBake}`);
+            closeProductDetail();
+        }
+
+        function notifyAvailability(productId) {
+            const product = AppState.products.find(p => p.id === productId);
+            showNotification(`Te notificaremos cuando ${product.name} esté disponible`);
+        }
+
+        // B-09: Carrito
+        function addToCart(productId) {
+            const product = AppState.products.find(p => p.id === productId);
+            const quantity = parseInt(document.getElementById('productQuantity')?.value || 1);
+            
+            const existingItem = AppState.cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                AppState.cart.push({
+                    ...product,
+                    quantity: quantity
+                });
+            }
+            
+            updateCartCount();
+            showNotification(`${product.name} agregado al carrito`);
+            closeProductDetail();
+        }
+
+        function showCart() {
+            if (!AppState.currentUser) {
+                showNotification('Por favor inicia sesión');
+                return;
+            }
+            
+            document.getElementById('authSection').classList.remove('active');
+            document.getElementById('catalogSection').classList.remove('active');
+            document.getElementById('cartSection').classList.add('active');
+            document.getElementById('checkoutSection').classList.remove('active');
+            document.getElementById('productDetailModal').classList.remove('active');
+            
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartSummary = document.getElementById('cartSummary');
+            
+            if (AppState.cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛒</div>
+                        <h3>Tu carrito está vacío</h3>
+                        <button class="btn" onclick="showCatalog()" style="margin-top: 20px;">
+                            Continuar comprando
+                        </button>
+                        <p style="margin-top: 20px; color: #667eea;">Productos populares: Pan Integral, Medialunas, Torta de Chocolate</p>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                return;
+            }
+            
+            cartItems.innerHTML = AppState.cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">${item.price} c/u</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <span style="margin: 0 15px; font-weight: bold;">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        <button class="quantity-btn" onclick="removeFromCart(${item.id})" style="margin-left: 10px; color: #ff4757; border-color: #ff4757;">
+                            🗑
+                        </button>
+                    </div>
+                    <div style="font-weight: bold; color: #667eea;">
+                        ${item.price * item.quantity}
+                    </div>
+                </div>
+            `).join('');
+            
+            const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            document.getElementById('cartSubtotal').textContent = `${subtotal}`;
+            document.getElementById('cartTotal').textContent = `${subtotal}`;
+            
+            cartSummary.style.display = 'block';
+        }
+
+        function updateQuantity(productId, change) {
+            const item = AppState.cart.find(i => i.id === productId);
+            if (!item) return;
+            
+            item.quantity += change;
+            
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            renderCart();
+            updateCartCount();
+        }
+
+        function removeFromCart(productId) {
+            const item = AppState.cart.find(i => i.id === productId);
+            AppState.cart = AppState.cart.filter(i => i.id !== productId);
+            showNotification(`${item.name} eliminado del carrito`);
+            renderCart();
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const count = AppState.cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // B-10: Checkout
+        function proceedToCheckout() {
+            if (AppState.cart.length === 0) return;
+            
+            document.getElementById('cartSection').classList.remove('active');
+            document.getElementById('checkoutSection').classList.add('active');
+            
+            updateCheckoutSummary();
+        }
+
+        function selectDelivery(type) {
+            document.querySelectorAll('.delivery-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.delivery-option').classList.add('selected');
+            
+            if (type === 'pickup') {
+                document.getElementById('pickupOptions').style.display = 'block';
+                document.getElementById('deliveryOptions').style.display = 'none';
+                updateCheckoutSummary(0);
+            } else {
+                document.getElementById('pickupOptions').style.display = 'none';
+                document.getElementById('deliveryOptions').style.display = 'block';
+                
+                // Simular cálculo de envío
+                const address = document.getElementById('deliveryAddress');
+                address.addEventListener('input', function() {
+                    const cost = calculateShippingCost(this.value);
+                    document.getElementById('deliveryCost').textContent = 
+                        cost === 0 ? '¡Envío GRATIS por compra superior a $5000!' : `Costo de envío: ${cost}`;
+                    updateCheckoutSummary(cost);
+                });
+            }
+        }
+
+        function calculateShippingCost(address) {
+            const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (subtotal >= 5000) return 0;
+            
+            if (address.toLowerCase().includes('palermo') || address.toLowerCase().includes('belgrano')) {
+                return 600; // Zona 1
+            } else if (address.toLowerCase().includes('san isidro')) {
+                return 800; // Zona 2
+            } else if (address.toLowerCase().includes('tigre')) {
+                return 1200; // Zona 3
+            }
+            return 800; // Default
+        }
+
+        function updateCheckoutSummary(shipping = 0) {
+            const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal + shipping;
+            
+            document.getElementById('checkoutSubtotal').textContent = `${subtotal}`;
+            document.getElementById('checkoutShipping').textContent = `${shipping}`;
+            document.getElementById('checkoutTotal').textContent = `${total}`;
+        }
+
+        function completeOrder() {
+            const deliveryOption = document.querySelector('.delivery-option.selected');
+            
+            if (!deliveryOption) {
+                showNotification('Por favor selecciona un método de entrega');
+                return;
+            }
+            
+            const isPickup = deliveryOption.textContent.includes('Retiro');
+            
+            if (isPickup) {
+                const pickupTime = document.getElementById('pickupTime').value;
+                if (!pickupTime) {
+                    showNotification('Por favor selecciona un horario de retiro');
+                    return;
+                }
+            } else {
+                const deliveryAddress = document.getElementById('deliveryAddress').value;
+                if (!deliveryAddress) {
+                    showNotification('Por favor ingresa una dirección de entrega');
+                    return;
+                }
+            }
+            
+            // Simular orden completada
+            const orderNumber = 'DH2024-' + String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            
+            showNotification(`¡Pedido confirmado! Número: ${orderNumber}`);
+            
+            // Limpiar carrito
+            AppState.cart = [];
+            updateCartCount();
+            
+            // Volver al catálogo
+            setTimeout(() => {
+                showCatalog();
+            }, 2000);
+        }
+
+        // Utilidades
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Inicialización
+        window.addEventListener('load', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
